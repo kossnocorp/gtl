@@ -3,6 +3,43 @@
 
 [![Build Status](https://secure.travis-ci.org/kossnocorp/gtl.png?branch=master)](http://travis-ci.org/kossnocorp/gtl)
 
+## Usage
+
+### Filter array of numbers with gt rule (alias to greaterThan)
+
+Full list of rules is avalible in ["rules" API section](#changelog).
+
+``` js
+gtl.filter([1, 2, 3, 4, 5], { gt: 3 });
+// => [4, 5]
+```
+
+### Filter array of strings
+
+``` js
+gtl.filer(['a', 'b', 'c', 'd'], { lte: 'c' });
+// => ['a', 'b', 'c']
+```
+
+### Filter array of objects through iterator
+
+``` js
+gtl.filer(
+  [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }],
+  { gte: 4 },
+  function (obj) {
+    return obj.num;
+  }
+);
+// => [{ num : 4 }, { num : 5 }]
+```
+
+## API
+
+```
+TODO: API here
+```
+
 ## Changelog
 
 This project uses [Semantic Versioning](http://semver.org/) for release numbering.
