@@ -1,4 +1,5 @@
-# gtl — greater than less
+# ![gtl.js](http://f.cl.ly/items/1s3T1h1q1Z3l2F3E2s45/gtl_logo.png)
+## Greater than less
 
 ## Changelog
 
