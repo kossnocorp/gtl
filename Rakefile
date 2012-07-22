@@ -13,21 +13,21 @@ task :test do
   stderr_strings = stderr_array.to_s
 
   if stderr_strings and
-    error_match = stderr_strings.match(/(\d+) of (\d+) tests failed/)
+    error_match = stderr_strings.match(/(\d+) of (\d+) (test[s]?) failed/)
 
-    failed_count, total_count = error_match.captures
+    failed_count, total_count, tests_failed_str = error_match.captures
 
-    message = "#{failed_count} of #{total_count} tests failed"
+    message = "#{failed_count} of #{total_count} #{tests_failed_str} failed"
 
-  elsif stdout_strings_match = stdout_strings.match(/(\d+) tests complete/)
-    complete_count, = stdout_strings_match.captures
+  elsif stdout_strings_match = stdout_strings.match(/(\d+) (test[s]?) complete/)
+    complete_count, tests_complete_str = stdout_strings_match.captures
 
-    if pending_matches = stdout_strings.match(/(\d+) tests pending/)
-      pending_count, = pending_matches.captures
+    if pending_matches = stdout_strings.match(/(\d+) test[s]? pending/)
+      pending_count, tests_pending_str = pending_matches.captures
     end
 
-    message = "#{complete_count} tests complete"
-    message += ", #{pending_count} tests pending" if pending_count
+    message = "#{complete_count} #{tests_complete_str} complete"
+    message += ", #{pending_count} #{tests_pending_str} pending" if pending_count
 
   else
     message = 'Something wrong, check console output.'
