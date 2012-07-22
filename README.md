@@ -1,6 +1,8 @@
 # ![gtl.js](http://f.cl.ly/items/1s3T1h1q1Z3l2F3E2s45/gtl_logo.png)
 ## Greater than less
 
+[![Build Status](https://secure.travis-ci.org/kossnocorp/gtl.png?branch=master)](http://travis-ci.org/kossnocorp/gtl)
+
 ## Changelog
 
 This project uses [Semantic Versioning](http://semver.org/) for release numbering.
