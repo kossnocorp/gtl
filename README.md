@@ -9,11 +9,11 @@
 TODO: Few examples: simple and advanced
 ```
 
-## API
+# API
 
-### grl.filter()
+## grl.filter()
 
-#### Filter array of numbers with gt rule (alias to greaterThan)
+### Filter array of numbers with gt rule (alias to greaterThan)
 
 Full list of rules is avalible in ["Avaliable rules"](#avaliable-rules).
 ``` js
@@ -21,14 +21,14 @@ gtl.filter([1, 2, 3, 4, 5], { gt: 3 });
 // => [4, 5]
 ```
 
-#### Filter array of strings
+### Filter array of strings
 
 ``` js
 gtl.filer(['a', 'b', 'c', 'd'], { lte: 'c' });
 // => ['a', 'b', 'c']
 ```
 
-#### Filter array of objects through iterator
+### Filter array of objects through iterator
 
 ``` js
 gtl.filer(
@@ -41,43 +41,43 @@ gtl.filer(
 // => [{ num : 4 }, { num : 5 }]
 ```
 
-#### Combine rules
+### Combine rules
 
 ```
 TODO: Example of combine rules
 ```
 
-#### Avaliable rules
+### Avaliable rules
 
-##### greaterThan (alias: gt)
+#### greaterThan (alias: gt)
 
 ``` js
 gtl.filter([1, 2, 3, 4, 5], { gt: 3 });
 // => [4, 5]
 ```
 
-##### greaterThanOrEqualTo (aliases: gte, gteq)
+#### greaterThanOrEqualTo (aliases: gte, gteq)
 
 ``` js
 gtl.filter([1, 2, 3, 4, 5], { gte: 3 });
 // => [3, 4, 5]
 ```
 
-##### lessThan (alias: lt)
+#### lessThan (alias: lt)
 
 ``` js
 gtl.filter([1, 2, 3, 4, 5], { lt: 3 });
 // => [1, 2]
 ```
 
-##### lessThanOrEqualTo (aliases: lte, lteq)
+#### lessThanOrEqualTo (aliases: lte, lteq)
 
 ``` js
 gtl.filter([1, 2, 3, 4, 5], { lte: 3 });
 // => [1, 2, 3]
 ```
 
-##### only
+#### only
 
 ``` js
 gtl.filer(
@@ -90,7 +90,7 @@ gtl.filer(
 // => [{ num : 1 }, { num : 2 }]
 ```
 
-##### except
+#### except
 
 ``` js
 gtl.filer(
@@ -103,18 +103,18 @@ gtl.filer(
 // => [{ num : 2 }, { num : 4 }, { num : 5 }]
 ```
 
-### gtl.grep()
+## gtl.grep()
 
 ``` js
 gtl.grep(['but break', 'my heart', 'for I must', 'hold my tongue'], 'my')
 // => ['my heart', 'hold my tongue']
 ```
 
-### gtl.define()
+## gtl.define()
 
 Allow to define you own rule
 
-#### Basic example
+### Basic example
 
 ``` js
 gtl.define('no', function () {
@@ -122,19 +122,19 @@ gtl.define('no', function () {
 });
 ```
 
-## Changelog
+# Changelog
 
 This project uses [Semantic Versioning](http://semver.org/) for release numbering.
 
 Currently this project in active development but no any releases yet.
 
-## Contributors
+# Contributors
 
 Idea and code by [@kossnocorp](http://koss.nocorp.me/).
 
 Check out full list of [contributors](https://github.com/kossnocorp/gtl/contributors).
 
-## License
+# License
 
 The MIT License
 
