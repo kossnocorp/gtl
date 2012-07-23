@@ -11,7 +11,7 @@ TODO: Few examples: simple and advanced
 
 # API
 
-## grl.filter()
+## gtl.filter()
 
 ### Filter array of numbers with gt rule (alias to greaterThan)
 
