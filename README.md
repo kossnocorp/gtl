@@ -5,23 +5,30 @@
 
 ## Usage
 
-### Filter array of numbers with gt rule (alias to greaterThan)
+```
+TODO: Few examples: simple and advanced
+```
 
-Full list of rules is avalible in ["rules" API section](#changelog).
+## API
 
+### grl.filter()
+
+#### Filter array of numbers with gt rule (alias to greaterThan)
+
+Full list of rules is avalible in ["Avaliable rules"](#avaliable-rules).
 ``` js
 gtl.filter([1, 2, 3, 4, 5], { gt: 3 });
 // => [4, 5]
 ```
 
-### Filter array of strings
+#### Filter array of strings
 
 ``` js
 gtl.filer(['a', 'b', 'c', 'd'], { lte: 'c' });
 // => ['a', 'b', 'c']
 ```
 
-### Filter array of objects through iterator
+#### Filter array of objects through iterator
 
 ``` js
 gtl.filer(
@@ -34,10 +41,85 @@ gtl.filer(
 // => [{ num : 4 }, { num : 5 }]
 ```
 
-## API
+#### Combine rules
 
 ```
-TODO: API here
+TODO: Example of combine rules
+```
+
+#### Avaliable rules
+
+##### greaterThan (alias: gt)
+
+``` js
+gtl.filter([1, 2, 3, 4, 5], { gt: 3 });
+// => [4, 5]
+```
+
+##### greaterThanOrEqualTo (aliases: gte, gteq)
+
+``` js
+gtl.filter([1, 2, 3, 4, 5], { gte: 3 });
+// => [3, 4, 5]
+```
+
+##### lessThan (alias: lt)
+
+``` js
+gtl.filter([1, 2, 3, 4, 5], { lt: 3 });
+// => [1, 2]
+```
+
+##### lessThanOrEqualTo (aliases: lte, lteq)
+
+``` js
+gtl.filter([1, 2, 3, 4, 5], { lte: 3 });
+// => [1, 2, 3]
+```
+
+##### only
+
+``` js
+gtl.filer(
+  [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }],
+  { only: [1, 2] },
+  function (obj) {
+    return obj.num;
+  }
+);
+// => [{ num : 1 }, { num : 2 }]
+```
+
+##### except
+
+``` js
+gtl.filer(
+  [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }],
+  { except: [1, 3] },
+  function (obj) {
+    return obj.num;
+  }
+);
+// => [{ num : 2 }, { num : 4 }, { num : 5 }]
+```
+
+### gtl.grep()
+
+``` js
+gtl.grep(['but break', 'my heart', 'for I must', 'hold my tongue'], 'my')
+// => ['my heart', 'hold my tongue']
+```
+
+### gtl.define()
+
+Allow to define you own rule
+
+#### Basic example
+
+``` js
+gtl.define('no', function () {
+  return false;
+});
 ```
 
 ## Changelog
