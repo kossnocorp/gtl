@@ -66,3 +66,11 @@ describe 'Greater than less', ->
           gte: 4
           (obj) -> obj.num
         ).should.eql [{ num : 4 }, { num : 5 }]
+
+    describe 'grep rule', ->
+
+      it 'should filter array by grepping strings', ->
+        gtl.filter(
+          ['but break', 'my heart', 'for I must', 'hold my tongue']
+          grep: 'my'
+        ).should.eql ['my heart', 'hold my tongue']
