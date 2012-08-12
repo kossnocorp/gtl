@@ -92,6 +92,12 @@ gtl.rules.except = (a, bs) ->
   not gtl.rules.only(a, bs)
 gtl.rules.not = gtl.rules.except
 
+###
+  Public: grep comparator
+###
+gtl.rules.grep = (str, substr) ->
+  str.search(substr) != -1
+
 # Export gtl to global scope
 if window?
   window.gtl = gtl
