@@ -90,7 +90,7 @@ gtl.filer(
 // => [{ num : 1 }, { num : 2 }]
 ```
 
-#### except
+#### except (alias: not)
 
 ``` js
 gtl.filer(
