@@ -58,3 +58,11 @@ describe 'Greater than less', ->
       it 'should filter array of strings with except rule', ->
         gtl.filter(['a', 'b', 'c', 'd', 'e'], except: ['a', 'c']).should.eql ['b', 'd', 'e']
 
+    describe 'filter arrays of objects through iterator', ->
+
+      it 'should use iterator passed as third argument', ->
+        gtl.filter(
+          [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }]
+          gte: 4
+          (obj) -> obj.num
+        ).should.eql [{ num : 4 }, { num : 5 }]
