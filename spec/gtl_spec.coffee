@@ -36,4 +36,4 @@ describe 'Greater than less', ->
     it 'should filter array with except rule', ->
       gtl.filter([1, 2, 3, 4, 5], except: 3).should.eql [1, 2, 4, 5]
       gtl.filter([1, 2, 3, 4, 5], not: 3).should.eql [1, 2, 4, 5]
-      gtl.filter([1, 2, 3, 4, 5], except: [1, 2]).should.eql [2, 4, 5]
+      gtl.filter([1, 2, 3, 4, 5], except: [1, 2]).should.eql [3, 4, 5]
