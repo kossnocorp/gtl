@@ -11,7 +11,7 @@ describe 'Greater than less', ->
 
   describe 'gtl.filter function', ->
 
-    describe 'filter with base rules', ->
+    describe 'greater/less rules', ->
 
       it 'should filter array with greaterThan rule', ->
         gtl.filter([1, 2, 3, 4, 5], greaterThan: 3).should.eql [4, 5]
@@ -50,6 +50,8 @@ describe 'Greater than less', ->
       it 'should filter array of strings with only rule', ->
         gtl.filter(['a', 'b', 'c', 'd', 'e'], only: 'c').should.eql ['c']
 
+    describe 'inclusion and exclusion rules', ->
+
       it 'should filter array with except rule', ->
         gtl.filter([1, 2, 3, 4, 5], except: 3).should.eql [1, 2, 4, 5]
         gtl.filter([1, 2, 3, 4, 5], not: 3).should.eql [1, 2, 4, 5]
@@ -57,6 +59,14 @@ describe 'Greater than less', ->
 
       it 'should filter array of strings with except rule', ->
         gtl.filter(['a', 'b', 'c', 'd', 'e'], except: ['a', 'c']).should.eql ['b', 'd', 'e']
+
+    describe 'grep rule', ->
+
+      it 'should filter array by grepping strings', ->
+        gtl.filter(
+          ['but break', 'my heart', 'for I must', 'hold my tongue']
+          grep: 'my'
+        ).should.eql ['my heart', 'hold my tongue']
 
     describe 'filter arrays of objects through iterator', ->
 
@@ -66,11 +76,3 @@ describe 'Greater than less', ->
           gte: 4
           (obj) -> obj.num
         ).should.eql [{ num : 4 }, { num : 5 }]
-
-    describe 'grep rule', ->
-
-      it 'should filter array by grepping strings', ->
-        gtl.filter(
-          ['but break', 'my heart', 'for I must', 'hold my tongue']
-          grep: 'my'
-        ).should.eql ['my heart', 'hold my tongue']
