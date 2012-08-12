@@ -28,22 +28,22 @@ clone = (array) ->
 ###
   Internal: filter array by rule and return copy
 ###
-filter = (array, comparator, rule) ->
+filter = (array, comparator, rule, iterator) ->
   result = []
 
   for elm in array
-    result.push(elm) if comparator(elm, rule)
+    result.push(elm) if comparator(iterator(elm), rule)
 
   result
 
 ###
   Public: filter function
 ###
-gtl.filter = (array, rules) ->
+gtl.filter = (array, rules, iterator = (elm) -> elm) ->
   result = clone(array)
 
   for name, rule of rules
-    result = filter(array, gtl.rules[name], rule)
+    result = filter(array, gtl.rules[name], rule, iterator)
 
   result
 
