@@ -24,14 +24,14 @@ gtl.filter([1, 2, 3, 4, 5], { gt: 3 });
 ### Filter array of strings
 
 ``` js
-gtl.filer(['a', 'b', 'c', 'd'], { lte: 'c' });
+gtl.filter(['a', 'b', 'c', 'd'], { lte: 'c' });
 // => ['a', 'b', 'c']
 ```
 
 ### Filter array of objects through iterator
 
 ``` js
-gtl.filer(
+gtl.filter(
   [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }],
   { gte: 4 },
   function (obj) {
@@ -80,7 +80,7 @@ gtl.filter([1, 2, 3, 4, 5], { lte: 3 });
 #### only
 
 ``` js
-gtl.filer(
+gtl.filter(
   [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }],
   { only: [1, 2] },
   function (obj) {
@@ -93,7 +93,7 @@ gtl.filer(
 #### except (alias: not)
 
 ``` js
-gtl.filer(
+gtl.filter(
   [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }],
   { except: [1, 3] },
   function (obj) {
