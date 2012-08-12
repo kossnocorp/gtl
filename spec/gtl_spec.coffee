@@ -30,9 +30,10 @@ describe 'Greater than less', ->
       gtl.filter([1, 2, 3, 4, 5], lteq: 3).should.eql [1, 2, 3]
 
     it 'should filter array with only rule', ->
-      gtl.filer([1, 2, 3, 4, 5], only: 2).should.eql [2]
-      gtl.filer([1, 2, 3, 4, 5], only: [1, 2]).should.eql [1, 2]
+      gtl.filter([1, 2, 3, 4, 5], only: 2).should.eql [2]
+      gtl.filter([1, 2, 3, 4, 5], only: [1, 2]).should.eql [1, 2]
 
     it 'should filter array with except rule', ->
-      gtl.filer([1, 2, 3, 4, 5], except: 3).should.eql [1, 2, 4, 5]
-      gtl.filer([1, 2, 3, 4, 5], except: [1, 2]).should.eql [2, 4, 5]
+      gtl.filter([1, 2, 3, 4, 5], except: 3).should.eql [1, 2, 4, 5]
+      gtl.filter([1, 2, 3, 4, 5], not: 3).should.eql [1, 2, 4, 5]
+      gtl.filter([1, 2, 3, 4, 5], except: [1, 2]).should.eql [2, 4, 5]
