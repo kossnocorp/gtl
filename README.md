@@ -117,14 +117,23 @@ gtl.rules contain all comparsion rules (lt, gt etc).
 You can add your own comparator to gtl.rules:
 
 ``` js
-gtl.rules.no = function () { return false; };
+gtl.rules.odd = function (num, rule) {
+  var isOdd = num % 2 === 1
+  if rule {
+    return isOdd;
+  } else {
+    return !isOdd;
+  }
+};
 ```
 
 ... then:
 
 ``` js
-gtl.filter([1, 2, 3, 4], no: true)
-// => []
+gtl.filter([1, 2, 3, 4], odd: true)
+// => [1, 3, 5]
+gtl.filter([1, 2, 3, 4], odd: false)
+// => [2, 4]
 ```
 
 # Changelog
