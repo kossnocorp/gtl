@@ -110,16 +110,21 @@ gtl.filter(['but break', 'my heart', 'for I must', 'hold my tongue'], { grep: 'm
 // => ['my heart', 'hold my tongue']
 ```
 
-## gtl.define()
+## gtl.rules
 
-Allow to define you own rule
+gtl.rules contain all comparsion rules (lt, gt etc).
 
-### Basic example
+You can add your own comparator to gtl.rules:
 
 ``` js
-gtl.define('no', function () {
-  return false;
-});
+gtl.rules.no = function () { return false; };
+```
+
+... then:
+
+``` js
+gtl.filter([1, 2, 3, 4], no: true)
+// => []
 ```
 
 # Changelog
