@@ -76,3 +76,9 @@ describe 'Greater than less', ->
           gte: 4
           (obj) -> obj.num
         ).should.eql [{ num : 4 }, { num : 5 }]
+
+    describe 'add custom comparator', ->
+      gtl.rules.odd = (a) -> a % 2 == 1
+      gtl.filter([1, 2, 3, 4, 5], odd: true).should.eql [1, 3, 5]
+      gtl.rules.even = (a) -> a % 2 != 1
+      gtl.filter([1, 2, 3, 4, 5], even: true).should.eql [2, 4]
