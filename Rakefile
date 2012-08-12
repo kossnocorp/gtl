@@ -33,5 +33,6 @@ task :test do
     message = 'Something wrong, check console output.'
   end
 
-  Talks.say message, notify: true, detach: true
+  `bundle exec terminal-notifier -message '#{message}' -title 'Test results' -remove TEST_RESULTS -group TEST_RESULTS`
+  Talks.say message, detach: true
 end
