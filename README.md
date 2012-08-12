@@ -103,10 +103,10 @@ gtl.filter(
 // => [{ num : 2 }, { num : 4 }, { num : 5 }]
 ```
 
-## gtl.grep()
+#### grep
 
 ``` js
-gtl.grep(['but break', 'my heart', 'for I must', 'hold my tongue'], 'my')
+gtl.filter(['but break', 'my heart', 'for I must', 'hold my tongue'], { grep: 'my' })
 // => ['my heart', 'hold my tongue']
 ```
 
