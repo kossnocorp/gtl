@@ -102,7 +102,7 @@ describe 'Greater than less', ->
         gtl.filter(
           [{ body: { text: 'but break' } }, { body: { text: 'my heart' } }, { body: { text: 'for I must' } }, { body: { text: 'hold my tongue' } }]
           grep: 'my'
-          or: 'body.text'
+          in: 'body.text'
         ).should.eql [{ body: { text: 'my heart' } }, { body: { text: 'hold my tongue' } }]
 
       it 'should filter array by specified fields', ->
