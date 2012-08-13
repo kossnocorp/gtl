@@ -5,7 +5,7 @@
    \ \_____\    \ \_\  \ \_____\
     \/_____/     \/_/   \/_____/
 
-  gtl.js ~ v0.0.0 ~ https://github.com/kossnocorp/gtl
+  gtl.js ~ v0.1.0 ~ https://github.com/kossnocorp/gtl
 
   Greater than less
 
