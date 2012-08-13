@@ -53,33 +53,32 @@ filter = (array, comparator, rule, iterator) ->
   result = []
 
   for elm in array
-    satisfiedToRules = false
+    satisfied = false
 
     if iterator.constructor == Function
-      satisfiedToRules = true if comparator(iterator(elm), rule)
+      satisfied = true if comparator(iterator(elm), rule)
     else
-      satisfiedToRules = true
+      satisfied = true
 
       # Each iterator rule (or, and)
       for iteratorRule in iterator
         do ->
 
-          compareResults = []
+          results = []
+
+          compare = (iterator) ->
+            results.push \
+              comparator(getByPath(elm, iterator), rule)
 
           if iteratorRule.iterator.constructor == String
-            compareResults.push \
-              comparator(getByPath(elm, iteratorRule.iterator), rule)
-
+            compare(iteratorRule.iterator)
           else if iteratorRule.iterator.constructor == Array
+            compare(i) for i in iteratorRule.iterator
 
-            for localIterator in iteratorRule.iterator
-              compareResults.push \
-                comparator(getByPath(elm, localIterator), rule)
+          unless isSatisfiedToIteratorRule(iteratorRule.rule, results)
+            satisfied = false
 
-          unless isSatisfiedToIteratorRule(iteratorRule.rule, compareResults)
-            satisfiedToRules = false
-
-    result.push(elm) if satisfiedToRules
+    result.push(elm) if satisfied
 
   result
 
