@@ -50,6 +50,16 @@ gtl.filter([1, 2, 3, 4, 5], { gt: 2, lte: 4 });
 // => [3, 4]
 ```
 
+You also can use multiply iterator rules:
+
+``` js
+gtl.filter(
+  [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }, { one: 4, two: -2, three: 3 }, { one: 5, two: 7, three: 1 }],
+  { gte: 4, or: ['one', 'two'], and: 'three' }
+);
+// => [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }]
+```
+
 ### Avaliable rules
 
 #### greaterThan (alias: gt)
