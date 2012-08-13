@@ -43,7 +43,7 @@ gtl.filter = (array, rules, iterator = (elm) -> elm) ->
   result = clone(array)
 
   for name, rule of rules
-    result = filter(array, gtl.rules[name], rule, iterator)
+    result = filter(result, gtl.rules[name], rule, iterator)
 
   result
 
