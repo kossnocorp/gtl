@@ -118,3 +118,11 @@ describe 'Greater than less', ->
           gte: 4
           and: ['one', 'two']
         ).should.eql [{ one: 4, two: 4 }, { one: 5, two: 7 }]
+
+      it 'should filter array by specified fields, combine or and and iterator rules', ->
+        gtl.filter(
+          [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }, { one: 4, two: -2, three: 3 }, { one: 5, two: 7, three: 1 }]
+          gte: 4
+          or: ['one', 'two']
+          and: 'three'
+        ).should.eql [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }]
