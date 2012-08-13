@@ -74,6 +74,11 @@ describe 'Greater than less', ->
           grep: /m./
         ).should.eql ['my heart', 'for I must', 'hold my tongue']
 
+    describe 'multiply', ->
+
+      it 'should filter by multiply rules', ->
+        gtl.filter([1, 2, 3, 4, 5], gt: 2, lte: 4).should.eql [3, 4]
+
     describe 'filter arrays of objects through iterator', ->
 
       it 'should use iterator passed as third argument', ->
