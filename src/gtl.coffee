@@ -58,16 +58,14 @@ filter = (array, comparator, rule, iterator) ->
           compareResults = []
 
           if iteratorRule.iterator.constructor == String
-            compareResults.push(
+            compareResults.push \
               comparator(getByPath(elm, iteratorRule.iterator), rule)
-            )
 
           else if iteratorRule.iterator.constructor == Array
 
             for localIterator in iteratorRule.iterator
-              compareResults.push(
+              compareResults.push \
                 comparator(getByPath(elm, localIterator), rule)
-              )
 
           satisfiedToRule = if iteratorRule.rule == 'or'
             compareResults.indexOf(true) != -1
