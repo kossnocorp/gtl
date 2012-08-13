@@ -38,6 +38,15 @@ getByPath = (obj, path) ->
       getByPath(obj[path[0]], path.slice(1))
 
 ###
+  Internal: is satisfied to iterator rule
+###
+isSatisfiedToIteratorRule = (rule, results) ->
+  if rule == 'or'
+    results.indexOf(true) != -1
+  else if rule == 'and'
+    results.indexOf(false) == -1
+
+###
   Internal: filter array by rule and return copy
 ###
 filter = (array, comparator, rule, iterator) ->
@@ -67,12 +76,8 @@ filter = (array, comparator, rule, iterator) ->
               compareResults.push \
                 comparator(getByPath(elm, localIterator), rule)
 
-          satisfiedToRule = if iteratorRule.rule == 'or'
-            compareResults.indexOf(true) != -1
-          else if iteratorRule.rule == 'and'
-            compareResults.indexOf(false) == -1
-
-          satisfiedToRules = false unless satisfiedToRule
+          unless isSatisfiedToIteratorRule(iteratorRule.rule, compareResults)
+            satisfiedToRules = false
 
     result.push(elm) if satisfiedToRules
 
