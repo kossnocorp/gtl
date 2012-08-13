@@ -43,7 +43,8 @@ gtl.filter = (array, rules, iterator = (elm) -> elm) ->
   result = clone(array)
 
   for name, rule of rules
-    result = filter(result, gtl.rules[name], rule, iterator)
+    if ['or', 'in', 'and'].indexOf(name) == -1
+      result = filter(result, gtl.rules[name], rule, iterator)
 
   result
 
