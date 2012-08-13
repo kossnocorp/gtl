@@ -55,28 +55,24 @@ filter = (array, comparator, rule, iterator) ->
       for iteratorRule in iterator
         do ->
 
-          # Set default satisfiedToRule value
-          if iteratorRule.rule == 'or'
-            satisfiedToRule = false
-          else if iteratorRule.rule == 'and'
-            satisfiedToRule = true
+          compareResults = []
 
           if iteratorRule.iterator.constructor == String
-            if comparator(getByPath(elm, iteratorRule.iterator), rule)
-              if iteratorRule.rule == 'or'
-                satisfiedToRule = true
-            else if iteratorRule.rule == 'and'
-              satisfiedToRule = false
+            compareResults.push(
+              comparator(getByPath(elm, iteratorRule.iterator), rule)
+            )
 
           else if iteratorRule.iterator.constructor == Array
 
             for localIterator in iteratorRule.iterator
+              compareResults.push(
+                comparator(getByPath(elm, localIterator), rule)
+              )
 
-              if comparator(getByPath(elm, localIterator), rule)
-                if iteratorRule.rule == 'or'
-                  satisfiedToRule = true
-              else if iteratorRule.rule == 'and'
-                satisfiedToRule = false
+          satisfiedToRule = if iteratorRule.rule == 'or'
+            compareResults.indexOf(true) != -1
+          else if iteratorRule.rule == 'and'
+            compareResults.indexOf(false) == -1
 
           satisfiedToRules = false unless satisfiedToRule
 
