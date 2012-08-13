@@ -26,21 +26,72 @@ clone = (array) ->
   result
 
 ###
+  Internal: get element by path
+###
+getByPath = (obj, path) ->
+  if path.constructor == String
+    getByPath(obj, path.split('.'))
+  else
+    if path.length == 1
+      obj[path]
+    else
+      getByPath(obj[path[0]], path.slice(1))
+
+###
   Internal: filter array by rule and return copy
 ###
 filter = (array, comparator, rule, iterator) ->
   result = []
 
   for elm in array
-    result.push(elm) if comparator(iterator(elm), rule)
+    satisfiedToRules = false
+
+    if iterator.constructor == Function
+      satisfiedToRules = true if comparator(iterator(elm), rule)
+    else
+      satisfiedToRules = true
+
+      # Each iterator rule (or,rule and)
+      for iteratorRule in iterator
+        do ->
+
+          if iteratorRule == 'or'
+            satisfiedToRule = false
+          else if iteratorRule == 'and'
+            satisfiedToRule = true
+
+          if iteratorRule.iterator.constructor == String
+            if comparator(getByPath(elm, iteratorRule.iterator), rule)
+              if iteratorRule.rule == 'or'
+                satisfiedToRule = true
+            else if iteratorRule.rule == 'and'
+              satisfiedToRule = false
+
+          satisfiedToRules = false unless satisfiedToRule
+
+    result.push(elm) if satisfiedToRules
 
   result
 
 ###
   Public: filter function
 ###
-gtl.filter = (array, rules, iterator = (elm) -> elm) ->
+gtl.filter = (array, rules, iterator) ->
   result = clone(array)
+
+  unless iterator?
+    iterator = []
+
+    if rules.or? or rules.in?
+      iterator.push(
+        rule: 'or'
+        iterator: rules.or || rules.in
+      )
+
+    iterator.push(rule: 'and', iterator: rules.and) if rules.and?
+
+    if iterator.length == 0
+      iterator = (elm) -> elm
 
   for name, rule of rules
     if ['or', 'in', 'and'].indexOf(name) == -1
