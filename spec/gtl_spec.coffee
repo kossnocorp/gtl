@@ -90,3 +90,26 @@ describe 'Greater than less', ->
         gtl.filter([1, 2, 3, 4, 5], odd: true).should.eql [1, 3, 5]
         gtl.rules.even = (a) -> a % 2 != 1
         gtl.filter([1, 2, 3, 4, 5], even: true).should.eql [2, 4]
+
+    describe 'iterator rules', ->
+
+      it 'should filter array by specified field', ->
+        gtl.filter(
+          [{ body: { text: 'but break' } }, { body: { text: 'my heart' } }, { body: { text: 'for I must' } }, { body: { text: 'hold my tongue' } }]
+          grep: 'my'
+          or: 'body.text'
+        ).should.eql [{ body: { text: 'my heart' } }, { body: { text: 'hold my tongue' } }]
+
+      it 'should filter array by specified fields', ->
+        gtl.filter(
+          [{ one: 1, two: 5 }, { one: 4, two: 4 }, { one: 4, two: -2 }, { one: 5, two: 7 }]
+          gt: 4
+          or: ['one', 'two']
+        ).should.eql [{ one: 1, two: 5 }, { one: 5, two: 7 }]
+
+      it 'should filter array by specified fields where all elements satisfy the condition', ->
+        gtl.filter(
+          [{ one: 1, two: 5 }, { one: 4, two: 4 }, { one: 4, two: -2 }, { one: 5, two: 7 }]
+          gte: 4
+          and: ['one', 'two']
+        ).should.eql [{ one: 4, two: 4 }, { one: 5, two: 7 }]
