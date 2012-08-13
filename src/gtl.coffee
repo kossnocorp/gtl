@@ -67,6 +67,16 @@ filter = (array, comparator, rule, iterator) ->
             else if iteratorRule.rule == 'and'
               satisfiedToRule = false
 
+          else if iteratorRule.iterator.constructor == Array
+
+            for localIterator in iteratorRule.iterator
+
+              if comparator(getByPath(elm, localIterator), rule)
+                if iteratorRule.rule == 'or'
+                  satisfiedToRule = true
+              else if iteratorRule.rule == 'and'
+                satisfiedToRule = false
+
           satisfiedToRules = false unless satisfiedToRule
 
     result.push(elm) if satisfiedToRules
