@@ -68,6 +68,12 @@ describe 'Greater than less', ->
           grep: 'my'
         ).should.eql ['my heart', 'hold my tongue']
 
+      it 'should filter array by grepping RegExp', ->
+        gtl.filter(
+          ['but break', 'my heart', 'for I must', 'hold my tongue']
+          grep: /m./
+        ).should.eql ['my heart', 'for I must', 'hold my tongue']
+
     describe 'filter arrays of objects through iterator', ->
 
       it 'should use iterator passed as third argument', ->

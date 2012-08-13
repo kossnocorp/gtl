@@ -105,10 +105,25 @@ gtl.filter(
 
 #### grep
 
+Grep array by string:
+
 ``` js
 gtl.filter(['but break', 'my heart', 'for I must', 'hold my tongue'], { grep: 'my' })
 // => ['my heart', 'hold my tongue']
 ```
+
+You also can use RegExp:
+
+``` js
+gtl.filter(['but break', 'my heart', 'for I must', 'hold my tongue'], { grep: /m./ })
+// => ['my heart', 'for I must', 'hold my tongue']
+```
+
+### Iterator rules
+
+#### in
+
+You can use in rule to set fields to compare
 
 ## gtl.rules
 
