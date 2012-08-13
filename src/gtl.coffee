@@ -51,13 +51,14 @@ filter = (array, comparator, rule, iterator) ->
     else
       satisfiedToRules = true
 
-      # Each iterator rule (or,rule and)
+      # Each iterator rule (or, and)
       for iteratorRule in iterator
         do ->
 
-          if iteratorRule == 'or'
+          # Set default satisfiedToRule value
+          if iteratorRule.rule == 'or'
             satisfiedToRule = false
-          else if iteratorRule == 'and'
+          else if iteratorRule.rule == 'and'
             satisfiedToRule = true
 
           if iteratorRule.iterator.constructor == String
