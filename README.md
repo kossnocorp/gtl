@@ -43,8 +43,11 @@ gtl.filter(
 
 ### Combine rules
 
-```
-TODO: Example of combine rules
+You can use multiply rules to filter array:
+
+``` js
+gtl.filter([1, 2, 3, 4, 5], { gt: 2, lte: 4 });
+// => [3, 4]
 ```
 
 ### Avaliable rules
