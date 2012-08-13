@@ -121,9 +121,37 @@ gtl.filter(['but break', 'my heart', 'for I must', 'hold my tongue'], { grep: /m
 
 ### Iterator rules
 
-#### in
+#### or (alias: in)
 
-You can use in rule to set fields to compare
+You can use `in` rule to set fields to search for:
+
+``` js
+gtl.filter(
+  [{ body: { text: 'but break' } }, { body: { text: 'my heart' } }, { body: { text: 'for I must' } }, { body: { text: 'hold my tongue' } }],
+  { grep: 'my', or: 'body.text' }
+);
+// => [{ body: { text: 'my heart' } }, { body: { text: 'hold my tongue' } }]
+```
+
+You also can specify multiply fields:
+
+``` js
+gtl.filter(
+  [{ one: 1, two: 5 }, { one: 4, two: 4 }, { one: 4, two: -2 }, { one: 5, two: 7 }],
+  { gt: 4, or: ['one', 'two'] }
+);
+// => [{ one: 1, two: 5 }, { one: 5, two: 7 }]
+```
+
+#### and
+
+``` js
+gtl.filter(
+  [{ one: 1, two: 5 }, { one: 4, two: 4 }, { one: 4, two: -2 }, { one: 5, two: 7 }],
+  { gte: 4, and: ['one', 'two'] }
+);
+// => [{ one: 4, two: 4 }, { one: 5, two: 7 }]
+```
 
 ## gtl.rules
 
@@ -150,6 +178,8 @@ gtl.filter([1, 2, 3, 4], odd: true)
 gtl.filter([1, 2, 3, 4], odd: false)
 // => [2, 4]
 ```
+
+You can't use `or`, `in` and `and` rule name because it's reserved to build-ins iterator rules.
 
 # Changelog
 
