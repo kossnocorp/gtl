@@ -5,8 +5,35 @@
 
 ## Usage
 
+You can use `gtl.filter` function to filter arrays by conditions like greaterThan, lessThanOrEqualTo etc.
+
+Full list of rules is avalible in ["Avaliable rules"](#avaliable-rules).
+
+``` js
+gtl.filter([1, 2, 3, 4, 5], { gt: 2, lte: 4 });
 ```
-TODO: Few examples: simple and advanced
+
+You can pass iterator function as second argument:
+
+``` js
+gtl.filter(
+  [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }],
+  { only: [1, 2] },
+  function (obj) {
+    return obj.num;
+  }
+);
+// => [{ num : 1 }, { num : 2 }]
+```
+
+... or use iterator rules (`in`, `or` and `and`):
+
+``` js
+gtl.filter(
+  [{ body: { text: 'but break' } }, { body: { text: 'my heart' } }, { body: { text: 'for I must' } }, { body: { text: 'hold my tongue' } }],
+  { grep: 'my', in: 'body.text' }
+);
+// => [{ body: { text: 'my heart' } }, { body: { text: 'hold my tongue' } }]
 ```
 
 # API
@@ -15,7 +42,6 @@ TODO: Few examples: simple and advanced
 
 ### Filter array of numbers with gt rule (alias to greaterThan)
 
-Full list of rules is avalible in ["Avaliable rules"](#avaliable-rules).
 ``` js
 gtl.filter([1, 2, 3, 4, 5], { gt: 3 });
 // => [4, 5]
@@ -141,7 +167,7 @@ You can use `in` rule to set fields to search for:
 ``` js
 gtl.filter(
   [{ body: { text: 'but break' } }, { body: { text: 'my heart' } }, { body: { text: 'for I must' } }, { body: { text: 'hold my tongue' } }],
-  { grep: 'my', or: 'body.text' }
+  { grep: 'my', in: 'body.text' }
 );
 // => [{ body: { text: 'my heart' } }, { body: { text: 'hold my tongue' } }]
 ```
@@ -198,7 +224,9 @@ You can't use `or`, `in` and `and` rule name because it's reserved to build-ins 
 
 This project uses [Semantic Versioning](http://semver.org/) for release numbering.
 
-Currently this project in active development but no any releases yet.
+## v0.1.0, released 13 Aug 2012
+
+First, initial release.
 
 # Contributors
 
