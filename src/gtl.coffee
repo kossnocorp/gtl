@@ -151,6 +151,18 @@ gtl.rules.not = gtl.rules.except = (a, bs) ->
 gtl.rules.grep = (str, substr) ->
   str.search(substr) != -1
 
+###
+  Public: fuzzy comparator
+###
+gtl.rules.fuzzy = (str, searchStr) ->
+  subStr = str
+  for char in searchStr
+    if -1 != i = subStr.search(char)
+      subStr = subStr.slice(i + 1)
+    else
+      return false
+  true
+
 # Export gtl to global scope
 if window?
   window.gtl = gtl
