@@ -158,6 +158,18 @@ gtl.filter(['but break', 'my heart', 'for I must', 'hold my tongue'], { grep: /m
 // => ['my heart', 'for I must', 'hold my tongue']
 ```
 
+#### fuzzy
+
+You can find elements using fuzzy search:
+
+``` js
+gtl.filter(
+  ['but break', 'my heart', 'for I must', 'hold my tongue'],
+  fuzzy: 'ut'
+);
+// => ['but break', 'for I must']
+```
+
 ### Iterator rules
 
 #### or (alias: in)

@@ -74,6 +74,14 @@ describe 'Greater than less', ->
           grep: /m./
         ).should.eql ['my heart', 'for I must', 'hold my tongue']
 
+    describe 'fuzzy', ->
+
+      it 'should filter array by fuzzy search in strings', ->
+        gtl.filter(
+          ['but break', 'my heart', 'for I must', 'hold my tongue']
+          fuzzy: 'ut'
+        ).should.eql ['but break', 'for I must']
+
     describe 'multiply', ->
 
       it 'should filter by multiply rules', ->
