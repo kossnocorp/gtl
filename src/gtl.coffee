@@ -114,28 +114,24 @@ gtl.rules = {}
 ###
   Public: greater than comparator
 ###
-gtl.rules.greaterThan = (a, b) -> a > b
-gtl.rules.gt = gtl.rules.greaterThan
+gtl.rules.gt = gtl.rules.greaterThan = (a, b) -> a > b
 
 ###
   Public: greater than or equal to comparator
 ###
-gtl.rules.greaterThanOrEqualTo = (a, b) -> a >= b
-gtl.rules.gte = gtl.rules.greaterThanOrEqualTo
-gtl.rules.gteq = gtl.rules.greaterThanOrEqualTo
+gtl.rules.gte = gtl.rules.gteq = gtl.rules.greaterThanOrEqualTo =
+  (a, b) -> a >= b
 
 ###
   Public: less than comparator
 ###
-gtl.rules.lessThan = (a, b) -> a < b
-gtl.rules.lt = gtl.rules.lessThan
+gtl.rules.lt = gtl.rules.lessThan = (a, b) -> a < b
 
 ###
   Public: less than or equal to comparator
 ###
-gtl.rules.lessThanOrEqualTo = (a, b) -> a <= b
-gtl.rules.lte = gtl.rules.lessThanOrEqualTo
-gtl.rules.lteq = gtl.rules.lessThanOrEqualTo
+gtl.rules.lte = gtl.rules.lteq = gtl.rules.lessThanOrEqualTo =
+  (a, b) -> a <= b
 
 ###
   Public: only comparator
@@ -149,9 +145,8 @@ gtl.rules.only = (a, bs) ->
 ###
   Public: except comparator
 ###
-gtl.rules.except = (a, bs) ->
+gtl.rules.not = gtl.rules.except = (a, bs) ->
   not gtl.rules.only(a, bs)
-gtl.rules.not = gtl.rules.except
 
 ###
   Public: grep comparator
