@@ -41,10 +41,11 @@ getByPath = (obj, path) ->
   Internal: is satisfied to iterator rule
 ###
 isSatisfiedToIteratorRule = (rule, results) ->
-  if rule == 'or'
-    results.indexOf(true) != -1
-  else if rule == 'and'
-    results.indexOf(false) == -1
+  switch rule
+    when 'or'
+      results.indexOf(true) != -1
+    when 'and'
+      results.indexOf(false) == -1
 
 ###
   Internal: filter array by rule and return copy
@@ -70,10 +71,11 @@ filter = (array, comparator, rule, iterator) ->
             results.push \
               comparator(getByPath(elm, iterator), rule)
 
-          if iteratorRule.iterator.constructor == String
-            compare(iteratorRule.iterator)
-          else if iteratorRule.iterator.constructor == Array
-            compare(i) for i in iteratorRule.iterator
+          switch iteratorRule.iterator.constructor 
+            when String
+              compare(iteratorRule.iterator)
+            when Array
+              compare(i) for i in iteratorRule.iterator
 
           unless isSatisfiedToIteratorRule(iteratorRule.rule, results)
             satisfied = false
@@ -88,16 +90,14 @@ filter = (array, comparator, rule, iterator) ->
 gtl.filter = (array, rules, iterator) ->
   result = clone(array)
 
-  unless iterator?
+  unless iterator
     iterator = []
 
-    if rules.or? or rules.in?
-      iterator.push(
-        rule: 'or'
-        iterator: rules.or || rules.in
-      )
+    if rules.or or rules.in
+      iterator.push(rule: 'or', iterator: rules.or || rules.in)
 
-    iterator.push(rule: 'and', iterator: rules.and) if rules.and?
+    if rules.and
+      iterator.push(rule: 'and', iterator: rules.and)
 
     if iterator.length == 0
       iterator = (elm) -> elm
