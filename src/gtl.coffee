@@ -20,10 +20,7 @@ gtl = {}
 ###
   Internal: clone array
 ###
-clone = (array) ->
-  result = []
-  result.push(elm) for elm in array
-  result
+clone = (array) -> array.slice()
 
 ###
   Internal: get element by path
