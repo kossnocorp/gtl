@@ -134,3 +134,17 @@ describe 'Greater than less', ->
           or: ['one', 'two']
           and: 'three'
         ).should.eql [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }]
+
+  describe 'gtl.curry', ->
+
+    it 'should curry filter options', ->
+      findWilly = gtl.curry(fuzzy: 'willy')
+      findWilly(
+        ['storm we are ill', 'is we ill yo', 'trololo will']
+      ).should eql ['is we ill yo']
+
+  describe 'gtl.clone', ->
+
+    it 'should clone gtl object', ->
+      cloned = gtl.clone()
+      cloned.rules.should.not.eq gtl.rules
