@@ -239,7 +239,7 @@ You can make copy of gtl.filter with predefined options:
 ``` js
 var findWilly = gtl.curry({ fuzzy: 'willy' });
 
-findWilly(['storm we are ill, 'is we ill yo', 'trololo will']);
+findWilly(['storm we are ill', 'is we ill yo', 'trololo will']);
 // => ['is we ill yo']
 ```
 
