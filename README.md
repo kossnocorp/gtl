@@ -232,6 +232,17 @@ gtl.filter([1, 2, 3, 4], odd: false)
 
 You can't use `or`, `in` and `and` rule name because it's reserved to build-ins iterator rules.
 
+## gtl.curry
+
+You can make copy of gtl.filter with predefined options:
+
+``` js
+var findWilly = gtl.curry({ fuzzy: 'willy' });
+
+findWilly(['storm we are ill, 'is we ill yo', 'trololo will']);
+// => ['is we ill yo']
+```
+
 # Changelog
 
 This project uses [Semantic Versioning](http://semver.org/) for release numbering.
