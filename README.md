@@ -243,6 +243,14 @@ findWilly(['storm we are ill, 'is we ill yo', 'trololo will']);
 // => ['is we ill yo']
 ```
 
+## gtl.copy
+
+You can create copy of gtl with custom set of rules by calling gtl.copy:
+
+``` js
+customGtl = gtl.copy();
+```
+
 # Changelog
 
 This project uses [Semantic Versioning](http://semver.org/) for release numbering.
