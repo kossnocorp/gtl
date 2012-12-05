@@ -141,7 +141,7 @@ describe 'Greater than less', ->
       findWilly = gtl.curry(fuzzy: 'willy')
       findWilly(
         ['storm we are ill', 'is we ill yo', 'trololo will']
-      ).should eql ['is we ill yo']
+      ).should.eql ['is we ill yo']
 
   describe 'gtl.clone', ->
 
