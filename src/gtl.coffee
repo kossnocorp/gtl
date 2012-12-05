@@ -163,6 +163,13 @@ gtl.rules.fuzzy = (str, searchStr) ->
       return false
   true
 
+###
+  Public: curry function
+###
+gtl.curry = (curriedRules) ->
+  (array, rules) ->
+    gtl.filter(array, curriedRules)
+
 # Export gtl to global scope
 if window?
   window.gtl = gtl
