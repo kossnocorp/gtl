@@ -137,11 +137,15 @@ describe 'Greater than less', ->
 
   describe 'gtl.curry', ->
 
-    it 'should curry filter options', ->
+    it 'should curry filter rules', ->
       findWilly = gtl.curry(fuzzy: 'willy')
       findWilly(
         ['storm we are ill', 'is we ill yo', 'trololo will']
       ).should.eql ['is we ill yo']
+
+    it 'should merge curried rules with passed by user'
+
+    it 'should curry iterator'
 
   describe 'gtl.clone', ->
 
