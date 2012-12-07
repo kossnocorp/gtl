@@ -32,7 +32,26 @@ class Gtl.Filter
   constructor: ->
     @rules = new Gtl.RuleSet()
 
-  filter: (array, comparator, rule, iterator) ->
+  filter: (array, rules, iterator) ->
+    result = clone(array)
+
+    unless iterator
+      iterator = []
+
+      if rules.or or rules.in
+        iterator.push(rule: 'or', iterator: rules.or || rules.in)
+
+      if rules.and
+        iterator.push(rule: 'and', iterator: rules.and)
+
+      if iterator.length == 0
+        iterator = (elm) -> elm
+
+    for name, rule of rules
+      if ['or', 'in', 'and'].indexOf(name) == -1
+        result = filter(result, @rules[name], rule, iterator)
+
+    result
 
 # Define main object
 gtl = new Gtl.Filter()
@@ -116,36 +135,8 @@ filter = (array, comparator, rule, iterator) ->
 
   result
 
-###
-  Private: create filter function
-###
-createFilter = (rulesObj) ->
-  (array, rules, iterator) ->
-    result = clone(array)
-
-    unless iterator
-      iterator = []
-
-      if rules.or or rules.in
-        iterator.push(rule: 'or', iterator: rules.or || rules.in)
-
-      if rules.and
-        iterator.push(rule: 'and', iterator: rules.and)
-
-      if iterator.length == 0
-        iterator = (elm) -> elm
-
-    for name, rule of rules
-      if ['or', 'in', 'and'].indexOf(name) == -1
-        result = filter(result, rulesObj[name], rule, iterator)
-
-    result
-
 # Define rules object
 gtl.rules = {}
-
-# Define filter function
-gtl.filter = createFilter(gtl.rules)
 
 ###
   Public: greater than comparator
@@ -220,9 +211,8 @@ gtl.curry = (curriedRules, curriedIterator) ->
   Public: clone gtl object
 ###
 gtl.clone = ->
-  newGtl = merge(gtl)
+  newGtl = new Gtl.Filter()
   newGtl.rules = merge(gtl.rules)
-  newGtl.filter = createFilter(newGtl.rules)
   newGtl
 
 # Export gtl to global scope
