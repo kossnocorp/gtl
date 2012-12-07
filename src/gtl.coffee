@@ -132,20 +132,17 @@ class Gtl.Filter
   constructor: ->
     @comparators = new Gtl.StandartComparatorSet()
 
-  filter: (array, rules, iterator) ->
+  filter: (array, rules, iterator = []) ->
     result = clone(array)
 
-    unless iterator
-      iterator = []
+    if rules.or or rules.in
+      iterator.push(rule: 'or', iterator: rules.or || rules.in)
 
-      if rules.or or rules.in
-        iterator.push(rule: 'or', iterator: rules.or || rules.in)
+    if rules.and
+      iterator.push(rule: 'and', iterator: rules.and)
 
-      if rules.and
-        iterator.push(rule: 'and', iterator: rules.and)
-
-      if iterator.length == 0
-        iterator = (elm) -> elm
+    if iterator.length == 0
+      iterator = (elm) -> elm
 
     for name, rule of rules
       if ['or', 'in', 'and'].indexOf(name) == -1
