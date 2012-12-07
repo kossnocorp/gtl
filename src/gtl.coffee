@@ -166,22 +166,21 @@ class Gtl.Filter
 
         # Each iterator rule (or, and)
         for iteratorRule in iterator
-          do =>
 
-            results = []
+          results = []
 
-            compare = (iterator) =>
-              results.push \
-                comparator(@getByPath(elm, iterator), rule)
+          compare = (iterator) =>
+            results.push \
+              comparator(@getByPath(elm, iterator), rule)
 
-            switch iteratorRule.iterator.constructor 
-              when String
-                compare(iteratorRule.iterator)
-              when Array
-                compare(i) for i in iteratorRule.iterator
+          switch iteratorRule.iterator.constructor 
+            when String
+              compare(iteratorRule.iterator)
+            when Array
+              compare(i) for i in iteratorRule.iterator
 
-            unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
-              satisfied = false
+          unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
+            satisfied = false
 
       result.push(elm) if satisfied
 
