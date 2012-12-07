@@ -45,13 +45,12 @@ class Gtl.Comparator
     result
 
   isElSatisfied: (el, rule, iterator) ->
-    satisfied = false
-
     if iterator.constructor == Function
-      satisfied = true if @compare(iterator(el), rule)
+      if @compare(iterator(el), rule)
+        true
+      else
+        false
     else
-      satisfied = true
-
       # Each iterator rule (or, and)
       for iteratorRule in iterator
 
@@ -68,9 +67,9 @@ class Gtl.Comparator
             compare(i) for i in iteratorRule.iterator
 
         unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
-          satisfied = false
+          return false
 
-    satisfied
+      true
 
   getByPath: (obj, path) ->
     if path.constructor == String
