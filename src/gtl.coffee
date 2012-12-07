@@ -153,11 +153,11 @@ class Gtl.Filter
 
     result
 
-  filterWithComparator: (array, comparator, rule, iterator) ->
+  filterWithComparator: (array, options...) ->
     result = []
     
     for el in array
-      result.push(el) if @isElSatisfied(el, comparator, rule, iterator)
+      result.push(el) if @isElSatisfied(el, options...)
 
     result
 
