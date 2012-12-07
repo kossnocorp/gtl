@@ -38,56 +38,7 @@ Gtl = {}
 
 # Comparator class
 class Gtl.Comparator
-  filter: (array, options...) ->
-    result = []
-    for el in array
-      result.push(el) if @isElSatisfied(el, options...)
-    result
-
-  isElSatisfied: (el, rule, iterator) ->
-    if iterator.constructor == Function
-      if @compare(iterator(el), rule)
-        true
-      else
-        false
-    else
-      # Each iterator rule (or, and)
-      for iteratorRule in iterator
-
-        results = []
-
-        compare = (iterator) =>
-          results.push \
-            @compare(@getByPath(el, iterator), rule)
-
-        switch iteratorRule.iterator.constructor 
-          when String
-            compare(iteratorRule.iterator)
-          when Array
-            compare(i) for i in iteratorRule.iterator
-
-        unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
-          return false
-
-      true
-
-  getByPath: (obj, path) ->
-    if path.constructor == String
-      @getByPath(obj, path.split('.'))
-    else
-      if path.length == 1
-        obj[path]
-      else
-        @getByPath(obj[path[0]], path.slice(1))
-
-  isSatisfiedToIteratorRule: (rule, results) ->
-    switch rule
-      when 'or'
-        results.indexOf(true) != -1
-      when 'and'
-        results.indexOf(false) == -1
   
-
 # Greater than comparator
 class Gtl.GreaterThanComparator extends Gtl.Comparator
   names: ['gt', 'greaterThan']
@@ -213,9 +164,58 @@ class Gtl.Filter
 
     for name, rule of rules
       if ['or', 'in', 'and'].indexOf(name) == -1
-        result = @comparators[name].filter(result, rule, iterator)
+        result = @filterWith(result, @comparators[name], rule, iterator)
 
     result
+
+  filterWith: (array, options...) ->
+    result = []
+    for el in array
+      result.push(el) if @isElSatisfied(el, options...)
+    result
+
+  isElSatisfied: (el, comparator, rule, iterator) ->
+    if iterator.constructor == Function
+      if comparator.compare(iterator(el), rule)
+        true
+      else
+        false
+    else
+      # Each iterator rule (or, and)
+      for iteratorRule in iterator
+
+        results = []
+
+        compare = (iterator) =>
+          results.push \
+            comparator.compare(@getByPath(el, iterator), rule)
+
+        switch iteratorRule.iterator.constructor 
+          when String
+            compare(iteratorRule.iterator)
+          when Array
+            compare(i) for i in iteratorRule.iterator
+
+        unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
+          return false
+
+      true
+
+  getByPath: (obj, path) ->
+    if path.constructor == String
+      @getByPath(obj, path.split('.'))
+    else
+      if path.length == 1
+        obj[path]
+      else
+        @getByPath(obj[path[0]], path.slice(1))
+
+  isSatisfiedToIteratorRule: (rule, results) ->
+    switch rule
+      when 'or'
+        results.indexOf(true) != -1
+      when 'and'
+        results.indexOf(false) == -1
 
   curry: (curriedRules, curriedIterator) ->
     (array, userRules, userIterator = curriedIterator) =>
