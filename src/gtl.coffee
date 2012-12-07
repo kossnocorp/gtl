@@ -146,9 +146,6 @@ filter = (array, comparator, rule, iterator) ->
 
   result
 
-# Define rules object
-gtl.comparators = {}
-
 ###
   Public: greater than comparator
 ###
