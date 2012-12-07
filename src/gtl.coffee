@@ -23,6 +23,21 @@ gtl = {}
 clone = (array) -> array.slice()
 
 ###
+  Internal: merge objects
+###
+merge = (a = {}, b = {}) ->
+  result = {}
+
+  copyPropsToResult = (obj) ->
+    for own key, value of obj
+      result[key] = value
+
+  copyPropsToResult(a)
+  copyPropsToResult(b)
+
+  result
+
+###
   Internal: get element by path
 ###
 getByPath = (obj, path) ->
@@ -166,9 +181,21 @@ gtl.rules.fuzzy = (str, searchStr) ->
 ###
   Public: curry function
 ###
-gtl.curry = (curriedRules) ->
-  (array, rules) ->
-    gtl.filter(array, curriedRules)
+gtl.curry = (curriedRules, curriedIterator) ->
+  (array, userRules, userIterator = curriedIterator) ->
+    if userRules and userRules.constructor == Function
+      rules = curriedRules
+      iterator = userRules
+    else
+      rules = merge(curriedRules, userRules)
+      iterator = userIterator
+
+    gtl.filter(array, rules, iterator)
+
+###
+  Public: clone gtl object
+###
+gtl.clone = ->
 
 # Export gtl to global scope
 if window?
