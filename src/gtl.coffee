@@ -14,6 +14,26 @@
   Copyright (c) 2012 Sasha Koss
 ###
 
+###
+  Internal: clone array
+###
+clone = (array) -> array.slice()
+
+###
+  Internal: merge objects
+###
+merge = (a = {}, b = {}) ->
+  result = {}
+
+  copyPropsToResult = (obj) ->
+    for own key, value of obj
+      result[key] = value
+
+  copyPropsToResult(a)
+  copyPropsToResult(b)
+
+  result
+
 Gtl = {}
 
 # Comparator class
@@ -129,9 +149,59 @@ class Gtl.Filter
 
     for name, rule of rules
       if ['or', 'in', 'and'].indexOf(name) == -1
-        result = filter(result, @comparators[name], rule, iterator)
+        result = @filterWithComparator(result, @comparators[name], rule, iterator)
 
     result
+
+  filterWithComparator: (array, comparator, rule, iterator) ->
+    result = []
+
+    for elm in array
+      satisfied = false
+
+      if iterator.constructor == Function
+        satisfied = true if comparator(iterator(elm), rule)
+      else
+        satisfied = true
+
+        # Each iterator rule (or, and)
+        for iteratorRule in iterator
+          do =>
+
+            results = []
+
+            compare = (iterator) =>
+              results.push \
+                comparator(@getByPath(elm, iterator), rule)
+
+            switch iteratorRule.iterator.constructor 
+              when String
+                compare(iteratorRule.iterator)
+              when Array
+                compare(i) for i in iteratorRule.iterator
+
+            unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
+              satisfied = false
+
+      result.push(elm) if satisfied
+
+    result
+
+  getByPath: (obj, path) ->
+    if path.constructor == String
+      @getByPath(obj, path.split('.'))
+    else
+      if path.length == 1
+        obj[path]
+      else
+        @getByPath(obj[path[0]], path.slice(1))
+
+  isSatisfiedToIteratorRule: (rule, results) ->
+    switch rule
+      when 'or'
+        results.indexOf(true) != -1
+      when 'and'
+        results.indexOf(false) == -1
 
   curry: (curriedRules, curriedIterator) ->
     (array, userRules, userIterator = curriedIterator) =>
@@ -148,83 +218,8 @@ class Gtl.Filter
 gtl = new Gtl.Filter()
 
 ###
-  Internal: clone array
-###
-clone = (array) -> array.slice()
-
-###
-  Internal: merge objects
-###
-merge = (a = {}, b = {}) ->
-  result = {}
-
-  copyPropsToResult = (obj) ->
-    for own key, value of obj
-      result[key] = value
-
-  copyPropsToResult(a)
-  copyPropsToResult(b)
-
-  result
-
-###
-  Internal: get element by path
-###
-getByPath = (obj, path) ->
-  if path.constructor == String
-    getByPath(obj, path.split('.'))
-  else
-    if path.length == 1
-      obj[path]
-    else
-      getByPath(obj[path[0]], path.slice(1))
-
-###
-  Internal: is satisfied to iterator rule
-###
-isSatisfiedToIteratorRule = (rule, results) ->
-  switch rule
-    when 'or'
-      results.indexOf(true) != -1
-    when 'and'
-      results.indexOf(false) == -1
-
-###
   Internal: filter array by rule and return copy
 ###
-filter = (array, comparator, rule, iterator) ->
-  result = []
-
-  for elm in array
-    satisfied = false
-
-    if iterator.constructor == Function
-      satisfied = true if comparator(iterator(elm), rule)
-    else
-      satisfied = true
-
-      # Each iterator rule (or, and)
-      for iteratorRule in iterator
-        do ->
-
-          results = []
-
-          compare = (iterator) ->
-            results.push \
-              comparator(getByPath(elm, iterator), rule)
-
-          switch iteratorRule.iterator.constructor 
-            when String
-              compare(iteratorRule.iterator)
-            when Array
-              compare(i) for i in iteratorRule.iterator
-
-          unless isSatisfiedToIteratorRule(iteratorRule.rule, results)
-            satisfied = false
-
-    result.push(elm) if satisfied
-
-  result
 
 # Export gtl to global scope
 if window?
