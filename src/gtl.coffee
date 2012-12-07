@@ -53,6 +53,17 @@ class Gtl.Filter
 
     result
 
+  curry: (curriedRules, curriedIterator) ->
+    (array, userRules, userIterator = curriedIterator) =>
+      if userRules and userRules.constructor == Function
+        rules = curriedRules
+        iterator = userRules
+      else
+        rules = merge(curriedRules, userRules)
+        iterator = userIterator
+
+      @filter(array, rules, iterator)
+
 # Define main object
 gtl = new Gtl.Filter()
 
@@ -192,20 +203,6 @@ gtl.rules.fuzzy = (str, searchStr) ->
     else
       return false
   true
-
-###
-  Public: curry function
-###
-gtl.curry = (curriedRules, curriedIterator) ->
-  (array, userRules, userIterator = curriedIterator) ->
-    if userRules and userRules.constructor == Function
-      rules = curriedRules
-      iterator = userRules
-    else
-      rules = merge(curriedRules, userRules)
-      iterator = userIterator
-
-    gtl.filter(array, rules, iterator)
 
 ###
   Public: clone gtl object
