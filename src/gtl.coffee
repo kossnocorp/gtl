@@ -97,31 +97,35 @@ filter = (array, comparator, rule, iterator) ->
   result
 
 ###
-  Public: filter function
+  Private: create filter function
 ###
-gtl.filter = (array, rules, iterator) ->
-  result = clone(array)
+createFilter = (rulesObj) ->
+  (array, rules, iterator) ->
+    result = clone(array)
 
-  unless iterator
-    iterator = []
+    unless iterator
+      iterator = []
 
-    if rules.or or rules.in
-      iterator.push(rule: 'or', iterator: rules.or || rules.in)
+      if rules.or or rules.in
+        iterator.push(rule: 'or', iterator: rules.or || rules.in)
 
-    if rules.and
-      iterator.push(rule: 'and', iterator: rules.and)
+      if rules.and
+        iterator.push(rule: 'and', iterator: rules.and)
 
-    if iterator.length == 0
-      iterator = (elm) -> elm
+      if iterator.length == 0
+        iterator = (elm) -> elm
 
-  for name, rule of rules
-    if ['or', 'in', 'and'].indexOf(name) == -1
-      result = filter(result, gtl.rules[name], rule, iterator)
+    for name, rule of rules
+      if ['or', 'in', 'and'].indexOf(name) == -1
+        result = filter(result, rulesObj[name], rule, iterator)
 
-  result
+    result
 
 # Define rules object
 gtl.rules = {}
+
+# Define filter function
+gtl.filter = createFilter(gtl.rules)
 
 ###
   Public: greater than comparator
