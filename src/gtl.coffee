@@ -14,8 +14,28 @@
   Copyright (c) 2012 Sasha Koss
 ###
 
+Gtl = {}
+
+# Rule class
+class Gtl.Rule
+
+  constructor: (names...) ->
+
+# Rules collection
+class Gtl.RuleSet
+  
+  newRule: (rule) ->
+
+# Main GTL object: set of rules, filter function
+class Gtl.Filter
+
+  constructor: ->
+    @rules = new Gtl.RuleSet()
+
+  filter: (array, comparator, rule, iterator) ->
+
 # Define main object
-gtl = {}
+gtl = new Gtl.Filter()
 
 ###
   Internal: clone array
