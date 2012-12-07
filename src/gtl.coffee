@@ -18,19 +18,99 @@ Gtl = {}
 
 # Comparator class
 class Gtl.Comparator
-
   constructor: (names...) ->
+
+# Greater than comparator
+class Gtl.GreaterThanComparator extends Gtl.Comparator
+  names: ['gt', 'greaterThan']
+  compare: (a, b) -> a > b
+
+# Greater than or equal to comparator
+class Gtl.GreaterThanOrEqualToComparator extends Gtl.Comparator
+  names: ['gte', 'gteq', 'greaterThanOrEqualTo']
+  compare: (a, b) -> a >= b
+
+# Less than comparator
+class Gtl.LessThanComparator extends Gtl.Comparator
+  names: ['lt', 'lessThan']
+  compare: (a, b) -> a < b
+
+# Less than or equal to comparator
+class Gtl.LessThanOrEqualToComparator extends Gtl.Comparator
+  names: ['lte', 'lteq', 'lessThanOrEqualTo'] 
+  compare: (a, b) -> a <= b
+
+# Only comparator
+class Gtl.OnlyComparator extends Gtl.Comparator
+  names: ['only']
+  compare: (a, bs) ->
+    if bs.constructor == Array
+      bs.indexOf(a) != -1
+    else
+      a == bs
+
+# Except comparator
+class Gtl.ExceptComparator extends Gtl.Comparator
+  names: ['not', 'except']
+  compare: (a, bs) ->
+    not gtl.comparators.only(a, bs)
+
+# Grep comparator
+class Gtl.GrepComparator extends Gtl.Comparator
+  names: ['grep']
+  compare: (str, substr) ->
+    str.search(substr) != -1
+
+# Fuzzy comparator
+class Gtl.FuzzyComparator extends Gtl.Comparator
+  names: ['fuzzy']
+  compare: (str, searchStr) ->
+    subStr = str
+    for char in searchStr
+      if -1 != i = subStr.search(char)
+        subStr = subStr.slice(i + 1)
+      else
+        return false
+    true
 
 # Comparators collection
 class Gtl.ComparatorSet
+
+  constructor: ->
+    @comparators = []
   
-  newRule: (rule) ->
+  add: (klass) ->
+    @comparators.push(new klass())
+
+  rehash: ->
+    for comparator in @comparators
+      for name in comparator.names
+        @[name] = comparator.compare
+
+# Standart comparator set
+class Gtl.StandartComparatorSet extends Gtl.ComparatorSet
+
+  set: [
+    Gtl.GreaterThanComparator
+    Gtl.GreaterThanOrEqualToComparator
+    Gtl.LessThanComparator
+    Gtl.LessThanOrEqualToComparator
+    Gtl.OnlyComparator
+    Gtl.ExceptComparator
+    Gtl.GrepComparator
+    Gtl.FuzzyComparator
+  ]
+
+  constructor: ->
+    super
+    @add(klass) for klass in @set
+    @rehash()
 
 # Main GTL object: set of rules, filter function
 class Gtl.Filter
 
   constructor: ->
-    @comparators = new Gtl.ComparatorSet()
+    @comparators = new Gtl.StandartComparatorSet()
 
   filter: (array, rules, iterator) ->
     result = clone(array)
@@ -145,61 +225,6 @@ filter = (array, comparator, rule, iterator) ->
     result.push(elm) if satisfied
 
   result
-
-###
-  Public: greater than comparator
-###
-gtl.comparators.gt = gtl.comparators.greaterThan = (a, b) -> a > b
-
-###
-  Public: greater than or equal to comparator
-###
-gtl.comparators.gte = gtl.comparators.gteq = gtl.comparators.greaterThanOrEqualTo =
-  (a, b) -> a >= b
-
-###
-  Public: less than comparator
-###
-gtl.comparators.lt = gtl.comparators.lessThan = (a, b) -> a < b
-
-###
-  Public: less than or equal to comparator
-###
-gtl.comparators.lte = gtl.comparators.lteq = gtl.comparators.lessThanOrEqualTo =
-  (a, b) -> a <= b
-
-###
-  Public: only comparator
-###
-gtl.comparators.only = (a, bs) ->
-  if bs.constructor == Array
-    bs.indexOf(a) != -1
-  else
-    a == bs
-
-###
-  Public: except comparator
-###
-gtl.comparators.not = gtl.comparators.except = (a, bs) ->
-  not gtl.comparators.only(a, bs)
-
-###
-  Public: grep comparator
-###
-gtl.comparators.grep = (str, substr) ->
-  str.search(substr) != -1
-
-###
-  Public: fuzzy comparator
-###
-gtl.comparators.fuzzy = (str, searchStr) ->
-  subStr = str
-  for char in searchStr
-    if -1 != i = subStr.search(char)
-      subStr = subStr.slice(i + 1)
-    else
-      return false
-  true
 
 # Export gtl to global scope
 if window?
