@@ -168,14 +168,3 @@ describe 'Greater than less', ->
         [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }]
         (obj) -> obj.num
       ).should.eql [{ num : 4 }, { num : 5 }]
-
-  describe 'gtl.clone', ->
-
-    it 'should clone gtl object', ->
-      cloned = gtl.clone()
-      cloned.comparators.should.not.eq gtl.comparators
-
-    it 'should copy based gtl.comparators', ->
-      cloned = gtl.clone()
-      for name, fn of gtl.comparators
-        cloned.comparators[name].should.eq fn

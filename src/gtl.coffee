@@ -204,14 +204,6 @@ gtl.comparators.fuzzy = (str, searchStr) ->
       return false
   true
 
-###
-  Public: clone gtl object
-###
-gtl.clone = ->
-  newGtl = new Gtl.Filter()
-  newGtl.comparators = merge(gtl.comparators)
-  newGtl
-
 # Export gtl to global scope
 if window?
   window.gtl = gtl
