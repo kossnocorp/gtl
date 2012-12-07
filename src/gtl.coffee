@@ -200,6 +200,10 @@ gtl.curry = (curriedRules, curriedIterator) ->
   Public: clone gtl object
 ###
 gtl.clone = ->
+  newGtl = merge(gtl)
+  newGtl.rules = {}
+  newGtl.filter = createFilter(newGtl.rules)
+  newGtl
 
 # Export gtl to global scope
 if window?

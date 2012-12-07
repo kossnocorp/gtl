@@ -174,3 +174,8 @@ describe 'Greater than less', ->
     it 'should clone gtl object', ->
       cloned = gtl.clone()
       cloned.rules.should.not.eq gtl.rules
+
+    it 'should copy based gtl rules', ->
+      cloned = gtl.clone()
+      for name, fn of gtl.rules
+        cloned.rules[name].should.eq fn
