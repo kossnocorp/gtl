@@ -201,7 +201,7 @@ gtl.curry = (curriedRules, curriedIterator) ->
 ###
 gtl.clone = ->
   newGtl = merge(gtl)
-  newGtl.rules = {}
+  newGtl.rules = merge(gtl.rules)
   newGtl.filter = createFilter(newGtl.rules)
   newGtl
 
