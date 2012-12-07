@@ -16,13 +16,13 @@
 
 Gtl = {}
 
-# Rule class
-class Gtl.Rule
+# Comparator class
+class Gtl.Comparator
 
   constructor: (names...) ->
 
-# Rules collection
-class Gtl.RuleSet
+# Comparators collection
+class Gtl.ComparatorSet
   
   newRule: (rule) ->
 
@@ -30,7 +30,7 @@ class Gtl.RuleSet
 class Gtl.Filter
 
   constructor: ->
-    @rules = new Gtl.RuleSet()
+    @comparators = new Gtl.ComparatorSet()
 
   filter: (array, rules, iterator) ->
     result = clone(array)
@@ -49,7 +49,7 @@ class Gtl.Filter
 
     for name, rule of rules
       if ['or', 'in', 'and'].indexOf(name) == -1
-        result = filter(result, @rules[name], rule, iterator)
+        result = filter(result, @comparators[name], rule, iterator)
 
     result
 
@@ -147,34 +147,34 @@ filter = (array, comparator, rule, iterator) ->
   result
 
 # Define rules object
-gtl.rules = {}
+gtl.comparators = {}
 
 ###
   Public: greater than comparator
 ###
-gtl.rules.gt = gtl.rules.greaterThan = (a, b) -> a > b
+gtl.comparators.gt = gtl.comparators.greaterThan = (a, b) -> a > b
 
 ###
   Public: greater than or equal to comparator
 ###
-gtl.rules.gte = gtl.rules.gteq = gtl.rules.greaterThanOrEqualTo =
+gtl.comparators.gte = gtl.comparators.gteq = gtl.comparators.greaterThanOrEqualTo =
   (a, b) -> a >= b
 
 ###
   Public: less than comparator
 ###
-gtl.rules.lt = gtl.rules.lessThan = (a, b) -> a < b
+gtl.comparators.lt = gtl.comparators.lessThan = (a, b) -> a < b
 
 ###
   Public: less than or equal to comparator
 ###
-gtl.rules.lte = gtl.rules.lteq = gtl.rules.lessThanOrEqualTo =
+gtl.comparators.lte = gtl.comparators.lteq = gtl.comparators.lessThanOrEqualTo =
   (a, b) -> a <= b
 
 ###
   Public: only comparator
 ###
-gtl.rules.only = (a, bs) ->
+gtl.comparators.only = (a, bs) ->
   if bs.constructor == Array
     bs.indexOf(a) != -1
   else
@@ -183,19 +183,19 @@ gtl.rules.only = (a, bs) ->
 ###
   Public: except comparator
 ###
-gtl.rules.not = gtl.rules.except = (a, bs) ->
-  not gtl.rules.only(a, bs)
+gtl.comparators.not = gtl.comparators.except = (a, bs) ->
+  not gtl.comparators.only(a, bs)
 
 ###
   Public: grep comparator
 ###
-gtl.rules.grep = (str, substr) ->
+gtl.comparators.grep = (str, substr) ->
   str.search(substr) != -1
 
 ###
   Public: fuzzy comparator
 ###
-gtl.rules.fuzzy = (str, searchStr) ->
+gtl.comparators.fuzzy = (str, searchStr) ->
   subStr = str
   for char in searchStr
     if -1 != i = subStr.search(char)
@@ -209,7 +209,7 @@ gtl.rules.fuzzy = (str, searchStr) ->
 ###
 gtl.clone = ->
   newGtl = new Gtl.Filter()
-  newGtl.rules = merge(gtl.rules)
+  newGtl.comparators = merge(gtl.comparators)
   newGtl
 
 # Export gtl to global scope
