@@ -143,9 +143,31 @@ describe 'Greater than less', ->
         ['storm we are ill', 'is we ill yo', 'trololo will']
       ).should.eql ['is we ill yo']
 
-    it 'should merge curried rules with passed by user'
+    it 'should merge curried rules with passed by user', ->
+      curried = gtl.curry(or: ['one', 'two'], and: 'three')
+      curried(
+        [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }, { one: 4, two: -2, three: 3 }, { one: 5, two: 7, three: 1 }]
+        gte: 4
+      ).should.eql [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }]
 
-    it 'should curry iterator'
+      curried = gtl.curry(or: ['one', 'two'], and: 'four')
+      curried(
+        [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }, { one: 4, two: -2, three: 3 }, { one: 5, two: 7, three: 1 }]
+        gte: 4
+        and: 'three'
+      ).should.eql [{ one: 1, two: 5, three: 4 }, { one: 4, two: 4, three: 9 }]
+
+    it 'should curry iterator', ->
+      curried = gtl.curry(gte: 4, (obj) -> obj.num)
+      curried(
+        [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }]
+      ).should.eql [{ num : 4 }, { num : 5 }]
+
+      curried = gtl.curry(gte: 4, (obj) -> obj.bum)
+      curried(
+        [{ num : 1 }, { num : 2 }, { num : 3 }, { num : 4 }, { num : 5 }]
+        (obj) -> obj.num
+      ).should.eql [{ num : 4 }, { num : 5 }]
 
   describe 'gtl.clone', ->
 
