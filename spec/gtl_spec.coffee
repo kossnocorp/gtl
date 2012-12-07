@@ -99,9 +99,10 @@ describe 'Greater than less', ->
     describe 'add custom comparator', ->
 
       it 'should works with custom rule added to gtl.comparators', ->
-        gtl.comparators.odd = (a) -> a % 2 == 1
+        gtl.comparators.add('odd', (a) -> a % 2 == 1)
+        gtl.comparators.add('even', (a) -> a % 2 != 1)
+        gtl.comparators.rehash()
         gtl.filter([1, 2, 3, 4, 5], odd: true).should.eql [1, 3, 5]
-        gtl.comparators.even = (a) -> a % 2 != 1
         gtl.filter([1, 2, 3, 4, 5], even: true).should.eql [2, 4]
 
     describe 'iterator rules', ->
