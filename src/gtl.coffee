@@ -155,36 +155,39 @@ class Gtl.Filter
 
   filterWithComparator: (array, comparator, rule, iterator) ->
     result = []
-
-    for elm in array
-      satisfied = false
-
-      if iterator.constructor == Function
-        satisfied = true if comparator(iterator(elm), rule)
-      else
-        satisfied = true
-
-        # Each iterator rule (or, and)
-        for iteratorRule in iterator
-
-          results = []
-
-          compare = (iterator) =>
-            results.push \
-              comparator(@getByPath(elm, iterator), rule)
-
-          switch iteratorRule.iterator.constructor 
-            when String
-              compare(iteratorRule.iterator)
-            when Array
-              compare(i) for i in iteratorRule.iterator
-
-          unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
-            satisfied = false
-
-      result.push(elm) if satisfied
+    
+    for el in array
+      result.push(el) if @isElSatisfied(el, comparator, rule, iterator)
 
     result
+
+  isElSatisfied: (el, comparator, rule, iterator) ->
+    satisfied = false
+
+    if iterator.constructor == Function
+      satisfied = true if comparator(iterator(el), rule)
+    else
+      satisfied = true
+
+      # Each iterator rule (or, and)
+      for iteratorRule in iterator
+
+        results = []
+
+        compare = (iterator) =>
+          results.push \
+            comparator(@getByPath(el, iterator), rule)
+
+        switch iteratorRule.iterator.constructor 
+          when String
+            compare(iteratorRule.iterator)
+          when Array
+            compare(i) for i in iteratorRule.iterator
+
+        unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
+          satisfied = false
+
+    satisfied
 
   getByPath: (obj, path) ->
     if path.constructor == String
