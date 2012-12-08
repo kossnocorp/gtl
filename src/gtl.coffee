@@ -233,8 +233,11 @@ class Gtl.Filter
     result
 
   isElSatisfied: (el, comparator, rule, iterator) ->
+    compare = (what) ->
+      comparator.compare(what, rule)
+
     if iterator.constructor == Function
-      return false unless comparator.compare(iterator(el), rule)
+      return false unless compare(iterator(el))
     else
       # Each iterator rule (or, and)
       for iteratorRule in iterator
@@ -245,7 +248,7 @@ class Gtl.Filter
           iteratorRule.iterator
 
         results = for i in iteratorRules
-          comparator.compare(@getByPath(el, i), rule)
+          compare(@getByPath(el, i))
 
         unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
           return false
