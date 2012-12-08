@@ -239,16 +239,13 @@ class Gtl.Filter
       # Each iterator rule (or, and)
       for iteratorRule in iterator
 
-        results = []
-
         iteratorRules = if iteratorRule.iterator.constructor == String
           [iteratorRule.iterator]
         else
           iteratorRule.iterator
 
-        for i in iteratorRules
-          results.push \
-            comparator.compare(@getByPath(el, i), rule)
+        results = for i in iteratorRules
+          comparator.compare(@getByPath(el, i), rule)
 
         unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
           return false
