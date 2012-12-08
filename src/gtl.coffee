@@ -37,7 +37,8 @@ Gtl = {}
 
 # Comparator class
 class Gtl.Comparator
-  
+  bind: (b) -> (a) => @compare(a, b)
+
 # Greater than comparator
 class Gtl.GreaterThanComparator extends Gtl.Comparator
   names: ['gt', 'greaterThan']
@@ -222,7 +223,8 @@ class Gtl.Filter
 
     for name, rule of rules
       if ['or', 'in', 'and'].indexOf(name) == -1
-        result = @filterWith(result, @comparators[name], rule, iterator)
+        compare = @comparators[name].bind(rule)
+        result = @filterWith(result, compare, iterator)
 
     result
 
@@ -232,10 +234,7 @@ class Gtl.Filter
       result.push(el) if @isElSatisfied(el, options...)
     result
 
-  isElSatisfied: (el, comparator, rule, iterator) ->
-    compare = (what) ->
-      comparator.compare(what, rule)
-
+  isElSatisfied: (el, compare, iterator) ->
     if iterator.constructor == Function
       return false unless compare(iterator(el))
     else
