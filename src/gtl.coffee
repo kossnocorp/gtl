@@ -14,14 +14,10 @@
   Copyright (c) 2012 Sasha Koss
 ###
 
-###
-  Internal: clone array
-###
+### Utilites ###
+
 clone = (array) -> array.slice()
 
-###
-  Internal: merge objects
-###
 merge = (a = {}, b = {}) ->
   result = {}
 
@@ -35,6 +31,9 @@ merge = (a = {}, b = {}) ->
   result
 
 Gtl = {}
+
+
+### Comparators ###
 
 # Comparator class
 class Gtl.Comparator
@@ -144,6 +143,9 @@ class Gtl.StandartComparatorSet extends Gtl.ComparatorSet
     @add(klass) for klass in @set
     @rehash()
 
+
+### Iterators ###
+
 # Base iterator
 class Gtl.Iterator
 
@@ -195,6 +197,9 @@ class Gtl.StandartIteratorSet extends Gtl.IteratorSet
     super
     @add(klass) for klass in @set
     @rehash()
+
+
+### Main object ###
 
 # Main GTL object: set of rules, filter function
 class Gtl.Filter
@@ -280,10 +285,6 @@ class Gtl.Filter
 
 # Define main object
 gtl = new Gtl.Filter()
-
-###
-  Internal: filter array by rule and return copy
-###
 
 # Export gtl to global scope
 if window?
