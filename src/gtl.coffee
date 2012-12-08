@@ -30,7 +30,87 @@ merge = (a = {}, b = {}) ->
 
   result
 
-Gtl = {}
+
+### Main object ###
+
+# Main GTL object: set of rules, filter function
+class Gtl
+
+  constructor: ->
+    @comparators = new Gtl.StandartComparatorSet()
+    @iterators   = new Gtl.StandartIteratorSet()
+
+  filter: (array, rules, iterator = []) ->
+    result = clone(array)
+
+    if rules.or or rules.in
+      iterator.push(rule: 'or', iterator: rules.or || rules.in)
+
+    if rules.and
+      iterator.push(rule: 'and', iterator: rules.and)
+
+    if iterator.length == 0
+      iterator = (elm) -> elm
+
+    for name, rule of rules
+      if ['or', 'in', 'and'].indexOf(name) == -1
+        compare = @comparators[name].bind(rule)
+        result = @filterWith(result, compare, iterator)
+
+    result
+
+  filterWith: (array, options...) ->
+    result = []
+    for el in array
+      result.push(el) if @isElSatisfied(el, options...)
+    result
+
+  isElSatisfied: (el, compare, iterator) ->
+    if iterator.constructor == Function
+      return false unless compare(iterator(el))
+    else
+      # Each iterator rule (or, and)
+      for iteratorRule in iterator
+
+        iteratorRules = if iteratorRule.iterator.constructor == String
+          [iteratorRule.iterator]
+        else
+          iteratorRule.iterator
+
+        results = for i in iteratorRules
+          compare(@getByPath(el, i))
+
+        unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
+          return false
+
+    true
+
+  getByPath: (obj, path) ->
+    if path.constructor == String
+      @getByPath(obj, path.split('.'))
+    else
+      if path.length == 1
+        obj[path]
+      else
+        @getByPath(obj[path[0]], path.slice(1))
+
+  isSatisfiedToIteratorRule: (rule, results) ->
+    switch rule
+      when 'or'
+        results.indexOf(true) != -1
+      when 'and'
+        results.indexOf(false) == -1
+
+  curry: (curriedRules, curriedIterator) ->
+    (array, userRules, userIterator = curriedIterator) =>
+      if userRules and userRules.constructor == Function
+        rules = curriedRules
+        iterator = userRules
+      else
+        rules = merge(curriedRules, userRules)
+        iterator = userIterator
+
+      @filter(array, rules, iterator)
 
 
 ### Comparators ###
@@ -199,90 +279,8 @@ class Gtl.StandartIteratorSet extends Gtl.IteratorSet
     @add(klass) for klass in @set
     @rehash()
 
-
-### Main object ###
-
-# Main GTL object: set of rules, filter function
-class Gtl.Filter
-
-  constructor: ->
-    @comparators = new Gtl.StandartComparatorSet()
-    @iterators   = new Gtl.StandartIteratorSet()
-
-  filter: (array, rules, iterator = []) ->
-    result = clone(array)
-
-    if rules.or or rules.in
-      iterator.push(rule: 'or', iterator: rules.or || rules.in)
-
-    if rules.and
-      iterator.push(rule: 'and', iterator: rules.and)
-
-    if iterator.length == 0
-      iterator = (elm) -> elm
-
-    for name, rule of rules
-      if ['or', 'in', 'and'].indexOf(name) == -1
-        compare = @comparators[name].bind(rule)
-        result = @filterWith(result, compare, iterator)
-
-    result
-
-  filterWith: (array, options...) ->
-    result = []
-    for el in array
-      result.push(el) if @isElSatisfied(el, options...)
-    result
-
-  isElSatisfied: (el, compare, iterator) ->
-    if iterator.constructor == Function
-      return false unless compare(iterator(el))
-    else
-      # Each iterator rule (or, and)
-      for iteratorRule in iterator
-
-        iteratorRules = if iteratorRule.iterator.constructor == String
-          [iteratorRule.iterator]
-        else
-          iteratorRule.iterator
-
-        results = for i in iteratorRules
-          compare(@getByPath(el, i))
-
-        unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
-          return false
-
-    true
-
-  getByPath: (obj, path) ->
-    if path.constructor == String
-      @getByPath(obj, path.split('.'))
-    else
-      if path.length == 1
-        obj[path]
-      else
-        @getByPath(obj[path[0]], path.slice(1))
-
-  isSatisfiedToIteratorRule: (rule, results) ->
-    switch rule
-      when 'or'
-        results.indexOf(true) != -1
-      when 'and'
-        results.indexOf(false) == -1
-
-  curry: (curriedRules, curriedIterator) ->
-    (array, userRules, userIterator = curriedIterator) =>
-      if userRules and userRules.constructor == Function
-        rules = curriedRules
-        iterator = userRules
-      else
-        rules = merge(curriedRules, userRules)
-        iterator = userIterator
-
-      @filter(array, rules, iterator)
-
 # Define main object
-gtl = new Gtl.Filter()
+gtl = new Gtl()
 
 # Export gtl to global scope
 if window?
