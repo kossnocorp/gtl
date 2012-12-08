@@ -144,11 +144,64 @@ class Gtl.StandartComparatorSet extends Gtl.ComparatorSet
     @add(klass) for klass in @set
     @rehash()
 
+# Base iterator
+class Gtl.Iterator
+
+# Or iterator
+class Gtl.OrIterator extends Gtl.Iterator
+  names: ['or']
+
+# And iterator
+class Gtl.AndIterator extends Gtl.Iterator
+  names: ['and']
+
+# Function comparator
+class Gtl.FunctionIterator extends Gtl.Iterator
+  constructor: (names, @get) ->
+    super
+    @names = if names.constructor == Array
+      names
+    else
+      names.split(/,/)
+
+# Iterator set
+class Gtl.IteratorSet
+
+  constructor: ->
+    @iterators = []
+  
+  add: (possibleName, possibleKlass) ->
+    if possibleName.constructor == String
+      iterator = new Gtl.FunctionIterator(possibleName, possibleKlass)
+    else
+      iterator = new possibleName()
+
+    @iterators.push(iterator)
+
+  rehash: ->
+    for iterator in @iterators
+      for name in iterator.names
+        @[name] = iterator
+
+# Standart iterator set
+class Gtl.StandartIteratorSet extends Gtl.IteratorSet
+
+  set: [
+    Gtl.OrIterator
+    Gtl.AndIterator
+  ]
+
+  constructor: ->
+    super
+    @add(klass) for klass in @set
+    @rehash()
+
 # Main GTL object: set of rules, filter function
 class Gtl.Filter
 
   constructor: ->
     @comparators = new Gtl.StandartComparatorSet()
+    @iterators   = new Gtl.StandartIteratorSet()
 
   filter: (array, rules, iterator = []) ->
     result = clone(array)
