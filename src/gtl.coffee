@@ -241,15 +241,14 @@ class Gtl.Filter
 
         results = []
 
-        compare = (iterator) =>
-          results.push \
-            comparator.compare(@getByPath(el, iterator), rule)
+        iteratorRules = if iteratorRule.iterator.constructor == String
+          [iteratorRule.iterator]
+        else
+          iteratorRule.iterator
 
-        switch iteratorRule.iterator.constructor 
-          when String
-            compare(iteratorRule.iterator)
-          when Array
-            compare(i) for i in iteratorRule.iterator
+        for i in iteratorRules
+          results.push \
+            comparator.compare(@getByPath(el, i), rule)
 
         unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
           return false
