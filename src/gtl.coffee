@@ -151,7 +151,7 @@ class Gtl.Iterator
 
 # Or iterator
 class Gtl.OrIterator extends Gtl.Iterator
-  names: ['or']
+  names: ['or', 'in']
 
 # And iterator
 class Gtl.AndIterator extends Gtl.Iterator
