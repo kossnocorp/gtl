@@ -73,10 +73,7 @@ class Gtl
     for iteratorRule in iterator
 
       if iteratorRule.constructor == Function
-        if compare(iteratorRule(el))
-          return true
-        else
-          return false
+        return compare(iteratorRule(el))
 
       iteratorRules = if iteratorRule.iterator.constructor == String
         [iteratorRule.iterator]
