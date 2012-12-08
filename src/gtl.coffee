@@ -43,6 +43,9 @@ class Gtl
   filter: (array, rules, iterator = []) ->
     result = clone(array)
 
+    if iterator.constructor == Function
+      iterator = [iterator]
+
     if rules.or or rules.in
       iterator.push(rule: 'or', iterator: rules.or || rules.in)
 
@@ -50,7 +53,7 @@ class Gtl
       iterator.push(rule: 'and', iterator: rules.and)
 
     if iterator.length == 0
-      iterator = (elm) -> elm
+      iterator.push((elm) -> elm)
 
     for name, rule of rules
       if ['or', 'in', 'and'].indexOf(name) == -1
@@ -66,22 +69,25 @@ class Gtl
     result
 
   isElSatisfied: (el, compare, iterator) ->
-    if iterator.constructor == Function
-      return false unless compare(iterator(el))
-    else
-      # Each iterator rule (or, and)
-      for iteratorRule in iterator
+    # Each iterator rule (or, and)
+    for iteratorRule in iterator
 
-        iteratorRules = if iteratorRule.iterator.constructor == String
-          [iteratorRule.iterator]
+      if iteratorRule.constructor == Function
+        if compare(iteratorRule(el))
+          return true
         else
-          iteratorRule.iterator
-
-        results = for i in iteratorRules
-          compare(@getByPath(el, i))
-
-        unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
           return false
+
+      iteratorRules = if iteratorRule.iterator.constructor == String
+        [iteratorRule.iterator]
+      else
+        iteratorRule.iterator
+
+      results = for i in iteratorRules
+        compare(@getByPath(el, i))
+
+      unless @isSatisfiedToIteratorRule(iteratorRule.rule, results)
+        return false
 
     true
 
